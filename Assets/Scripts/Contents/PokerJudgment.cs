@@ -42,7 +42,7 @@ public class PokerJudgment
         UpDateRank(HandRank.Flush);
         CheckStraightFlush();
         
-        CheckPair(); // 풀하우스나 포카드 가능성
+        CheckPair(); // 풀하우스나 포카드 체크로직 나오면 교체
     }
 
     void CheckStraightFlush()
