@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Card : MonoBehaviour
 {
+    int orderNumber;
+
+    CardData curData;
     Transform model;
     MeshFilter filter;
+    WaitForSeconds waitTime = new(2f);
+
+    public int OrderNumber { get { return orderNumber; } set { orderNumber = value; } }
 
     private void Awake()
     {
@@ -13,10 +20,11 @@ public class Card : MonoBehaviour
         model = GetComponentsInChildren<Transform>()[1];
     }
 
-    public void SetCard(CardData cardData)
+    public void SetCard(CardData cardData, bool isReroll)
     {
-        string shape = cardData.Shape.ToString();
-        string num = cardData.Number.ToString();
+        curData = cardData;
+        string shape = curData.Shape.ToString();
+        string num = curData.Number.ToString();
 
         switch (num) 
         {
@@ -35,6 +43,23 @@ public class Card : MonoBehaviour
         }
 
         filter.mesh = Resources.Load<Mesh>($"Meshs/{shape}_{num}");
-        model.Rotate(new Vector3(0, 180f,0));
+
+        StartCoroutine(ReverseAnim(isReroll));
+    }
+
+    IEnumerator ReverseAnim(bool isReroll)
+    {
+        model.Rotate(Vector3.zero);
+        model.DORotate(new Vector3(0, -180f, 0), 2f);
+
+        yield return waitTime;
+
+        if (!isReroll)
+            CardManager.instance.uiPoker.RerollButtonActiveCont(OrderNumber, true);
+    }
+
+    public void ReverseCard()
+    {
+        model.localEulerAngles = Vector3.zero;
     }
 }

@@ -6,15 +6,19 @@ public class CardManager : MonoBehaviour
 {
     public static CardManager instance;
     
-    CardShuffler shuffler;
+    private CardShuffler shuffler;
+    public UIPoker uiPoker;
 
     public List<Card> cards = new();
-    List<CardData> cardDatas = new();
+    CardData[] cardDatas = new CardData[5];
 
     private void Awake()
     {
         instance = this;
         shuffler = gameObject.AddComponent<CardShuffler>();
+
+        for (int i = 0; i < cards.Count; i++)
+            cards[i].OrderNumber = i;
     }
 
     public void StartPoker()
@@ -22,16 +26,18 @@ public class CardManager : MonoBehaviour
         shuffler.MakeDeck();
     }
 
-    public void AddSelectedCard(CardData cardData)
+    public void AddSelectedCard(int orderNumber, CardData cardData)
     {
-        cardDatas.Add(cardData);
+        cardDatas[orderNumber] = cardData;
     }
 
-    public void ExportCardData()
+    public void ExportCardData(int orderNumber, bool isReroll = false)
     {
-        for (int i = 0; i < cards.Count; i++)
-        {
-            cards[i].SetCard(cardDatas[i]);
-        }
+        cards[orderNumber].SetCard(cardDatas[orderNumber], isReroll);
+    }
+
+    public void Reroll(int orderNumber)
+    {
+        shuffler.RerollCard(orderNumber);
     }
 }

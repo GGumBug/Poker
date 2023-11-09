@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CardShuffler : MonoBehaviour
 {
+    int maxCount;
+
     List<CardData> originDeck = new();
     List<CardData> remainDeck = new();
 
@@ -32,20 +34,31 @@ public class CardShuffler : MonoBehaviour
             remainDeck.Add(cloneCard);
         }
 
-        int maxCount = remainDeck.Count;
-        for (int i = 0; i < 5; i++)
-        {
-            int ran = Random.Range(0, maxCount);
-            CardManager.instance.AddSelectedCard(remainDeck[ran]);
-            remainDeck[ran] = remainDeck[maxCount - 1];
-            maxCount--;
-        }
+        DrawCard(5);
 
-        CardManager.instance.ExportCardData();
+        for (int i = 0; i < 5; i++)
+            CardManager.instance.ExportCardData(i);
     }
 
     public void DrawCard(int count)
     {
-
+        maxCount = remainDeck.Count;
+        for (int i = 0; i < 5; i++)
+        {
+            int ran = Random.Range(0, maxCount);
+            CardManager.instance.AddSelectedCard(i, remainDeck[ran]);
+            remainDeck[ran] = remainDeck[maxCount - 1];
+            maxCount--;
+        }
     }
+
+    public void RerollCard(int orderNumber)
+    {
+        int ran = Random.Range(0, maxCount);
+        CardManager.instance.AddSelectedCard(orderNumber, remainDeck[ran]);
+        remainDeck[ran] = remainDeck[maxCount - 1];
+        maxCount--;
+
+        CardManager.instance.ExportCardData(orderNumber, true);
+    }   
 }
