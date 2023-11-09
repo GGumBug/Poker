@@ -11,3 +11,16 @@ public enum CardShape
     Heart,
     Diamond
 }
+
+public enum HandRank
+{
+    NoPairs,
+    OnePair,
+    TwoPairs,
+    ThreeofaKind,
+    Straight,
+    Flush,
+    FullHouse,
+    FourofaKind,
+    StraightFlush
+}

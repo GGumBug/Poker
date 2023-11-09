@@ -6,10 +6,13 @@ using UnityEngine.UI;
 public class UIPoker : MonoBehaviour
 {
     public GameObject panelRerollButtons;
+    public Button btnCheck;
     public List<Button> rerollButtons = new();
 
     private void Awake()
     {
+        btnCheck.onClick.AddListener(StartJudgment);
+
         for (int i = 0; i < rerollButtons.Count; i++)
         {
             int idx = i;
@@ -27,5 +30,10 @@ public class UIPoker : MonoBehaviour
         rerollButtons[orderNumber].gameObject.SetActive(false);
         CardManager.instance.cards[orderNumber].ReverseCard();
         CardManager.instance.Reroll(orderNumber);
+    }
+
+    void StartJudgment()
+    {
+        CardManager.instance.judgment.StartJudgment();
     }
 }

@@ -7,15 +7,18 @@ public class CardManager : MonoBehaviour
     public static CardManager instance;
     
     private CardShuffler shuffler;
+    public PokerJudgment judgment;
     public UIPoker uiPoker;
 
     public List<Card> cards = new();
-    CardData[] cardDatas = new CardData[5];
+    public CardData[] CardDatas { get; private set; } = new CardData[5];
 
     private void Awake()
     {
         instance = this;
+
         shuffler = gameObject.AddComponent<CardShuffler>();
+        judgment = new PokerJudgment();
 
         for (int i = 0; i < cards.Count; i++)
             cards[i].OrderNumber = i;
@@ -28,12 +31,12 @@ public class CardManager : MonoBehaviour
 
     public void AddSelectedCard(int orderNumber, CardData cardData)
     {
-        cardDatas[orderNumber] = cardData;
+        CardDatas[orderNumber] = cardData;
     }
 
     public void ExportCardData(int orderNumber, bool isReroll = false)
     {
-        cards[orderNumber].SetCard(cardDatas[orderNumber], isReroll);
+        cards[orderNumber].SetCard(CardDatas[orderNumber], isReroll);
     }
 
     public void Reroll(int orderNumber)
