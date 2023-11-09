@@ -43,4 +43,14 @@ public class CardManager : MonoBehaviour
     {
         shuffler.RerollCard(orderNumber);
     }
+
+    //TestLogic
+    public void Test()
+    {
+        CardDatas[0] = new CardData(CardColor.Red, CardShape.Heart, 1);
+        CardDatas[1] = new CardData(CardColor.Red, CardShape.Heart, 2);
+        CardDatas[2] = new CardData(CardColor.Red, CardShape.Heart, 3);
+        CardDatas[3] = new CardData(CardColor.Red, CardShape.Heart, 4);
+        CardDatas[4] = new CardData(CardColor.Red, CardShape.Heart, 5);
+    }
 }

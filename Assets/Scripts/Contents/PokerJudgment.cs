@@ -20,6 +20,8 @@ public class PokerJudgment
         for (int i = 0; i < currentCards.Length; i++)
             Cardnumbers[i] = currentCards[i].Number;
         Cardnumbers = InsertionSort(Cardnumbers);
+
+        CheckFlush();
     }
 
     void CheckFlush()
@@ -30,23 +32,24 @@ public class PokerJudgment
         {
             if (cardShape != currentCards[i].Shape)
             {
-                // 페어 계산으로 넘어가기
+                CheckPair();
+                return;
             }
             else
                 cardShape = currentCards[i].Shape;
         }
 
-        isFlush = true;
+        UpDateRank(HandRank.Flush);
         CheckStraightFlush();
+        
+        CheckPair(); // 풀하우스나 포카드 가능성
     }
 
     void CheckStraightFlush()
     {
         CheckStraight();
         if (isStraight)
-            CheckRank(HandRank.StraightFlush);
-        else
-            isFlush = true;
+            UpDateRank(HandRank.StraightFlush);
     }
 
     void CheckStraight()
@@ -70,13 +73,17 @@ public class PokerJudgment
 
     void CheckPair()
     {
-
+        CheckStraight();
+        if (isStraight)
+            UpDateRank(HandRank.Straight);
     }   
 
-    void CheckRank(HandRank newRank)
+    void UpDateRank(HandRank newRank)
     {
         if ((int)handRank < (int)newRank)
             handRank = newRank;
+
+        Debug.Log(handRank.ToString());
     }
 
     private int[] InsertionSort(int[] arr)
