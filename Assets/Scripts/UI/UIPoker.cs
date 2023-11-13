@@ -13,6 +13,8 @@ public class UIPoker : MonoBehaviour
     public TMP_Text txtResult;
     public List<Button> rerollButtons = new();
 
+    Tweener tweener;
+
     private void Awake()
     {
         btnCheck.onClick.AddListener(StartJudgment);
@@ -53,12 +55,13 @@ public class UIPoker : MonoBehaviour
 
     public void AppearResult(string result)
     {
-        txtResult.DOFade(1, 2f);
+        tweener = txtResult.DOFade(1, 2f);
         txtResult.text = result;
     }
 
     void Clear()
     {
+        tweener.Kill();
         txtResult.DOFade(0, 0.5f);
         foreach (var btn in rerollButtons)
             btn.gameObject.SetActive(false);
