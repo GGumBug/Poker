@@ -56,6 +56,8 @@ public class Card : MonoBehaviour
 
         if (!isReroll)
             CardManager.instance.uiPoker.RerollButtonActiveCont(OrderNumber, true);
+
+        CardManager.instance.uiPoker.ActiveTrueCheckButton();
     }
 
     public void ReverseCard()

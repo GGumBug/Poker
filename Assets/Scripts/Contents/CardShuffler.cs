@@ -61,4 +61,11 @@ public class CardShuffler : MonoBehaviour
 
         CardManager.instance.ExportCardData(orderNumber, true);
     }   
+
+    public void Clear()
+    {
+        originDeck.Clear();
+        remainDeck.Clear();
+        MakeDeck();
+    }
 }

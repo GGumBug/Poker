@@ -7,6 +7,5 @@ public class RandomCard : MonoBehaviour
     private void Start()
     {
         CardManager.instance.StartPoker();
-        //CardManager.instance.Test();
     }
 }

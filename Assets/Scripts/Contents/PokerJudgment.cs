@@ -7,19 +7,19 @@ public class PokerJudgment
     bool isOnePair;
     bool isThreePair;
     bool isStraight;
-    bool isFlush;
 
     CardData[] currentCards;
-    int[] Cardnumbers = new int[5];
+    int[] cardnumbers = new int[5];
     HandRank handRank = HandRank.NoPairs;
+    List<List<int>> pairList = new();
 
     public void StartJudgment()
     {
         currentCards = CardManager.instance.CardDatas;
 
         for (int i = 0; i < currentCards.Length; i++)
-            Cardnumbers[i] = currentCards[i].Number;
-        Cardnumbers = InsertionSort(Cardnumbers);
+            cardnumbers[i] = currentCards[i].Number;
+        cardnumbers = InsertionSort(cardnumbers);
 
         CheckFlush();
     }
@@ -41,8 +41,13 @@ public class PokerJudgment
 
         UpDateRank(HandRank.Flush);
         CheckStraightFlush();
-        
-        CheckPair(); // 풀하우스나 포카드 체크로직 나오면 교체
+        if (handRank == HandRank.StraightFlush)
+        {
+            EndJudgment();
+            return;
+        }
+
+        CheckPair();
     }
 
     void CheckStraightFlush()
@@ -57,11 +62,11 @@ public class PokerJudgment
         int link = 0;
         bool isEight = false;
 
-        for (int i = 0; i < Cardnumbers.Length - 1; i++)
+        for (int i = 0; i < cardnumbers.Length - 1; i++)
         {
-            if (Cardnumbers[i] - Cardnumbers[i + 1] == -1)
+            if (cardnumbers[i] - cardnumbers[i + 1] == -1)
                 link++;
-            else if (Cardnumbers[i] - Cardnumbers[i + 1] == -8)
+            else if (cardnumbers[i] - cardnumbers[i + 1] == -8)
                 isEight = true;
         }
 
@@ -75,8 +80,101 @@ public class PokerJudgment
     {
         CheckStraight();
         if (isStraight)
+        {
             UpDateRank(HandRank.Straight);
-    }   
+            EndJudgment();
+        }
+        else
+            MakePairList();
+    }
+
+    void MakePairList()
+    {
+        for (int i = 0; i < cardnumbers.Length; i++)
+        {
+            for (global::System.Int32 j = i + 1; j < cardnumbers.Length; j++)
+            {
+                if (cardnumbers[i] == cardnumbers[j])
+                {
+                    if (pairList.Count == 0)
+                    {
+                        AddPairDict(cardnumbers[i]);
+                        continue;
+                    }
+
+                    int compareIdx = pairList.Count - 1;
+                    if (pairList[compareIdx].Contains(cardnumbers[i]))
+                        pairList[compareIdx].Add(cardnumbers[i]);
+                    else
+                        AddPairDict(cardnumbers[i]);
+                }
+            }
+        }
+
+        JudgmentPair();
+    }
+
+    void AddPairDict(int key)
+    {
+        List<int> tempList = new();
+        tempList.Add(key);
+
+        pairList.Add(tempList);
+    }
+
+    void JudgmentPair()
+    {
+        int pairListCount = pairList.Count;
+
+        switch(pairListCount)
+        {
+            case 0:
+                UpDateRank(HandRank.NoPairs);
+                EndJudgment();
+                break;
+            case 1:
+                CheckFourOfAKind();
+                break;
+            case 2:
+                CheckFullHouse();
+                break;
+        }
+    }
+
+    void CheckFourOfAKind()
+    {
+        int pairCount = pairList[0].Count;
+
+        switch(pairCount)
+        {
+            case 1:
+                UpDateRank(HandRank.OnePair);
+                break;
+            case 3:
+                UpDateRank(HandRank.ThreeOfAKind);
+                break;
+            case 6:
+                UpDateRank(HandRank.FourOfAKind);
+                break;
+        }
+
+        EndJudgment();
+    }
+
+    void CheckFullHouse()
+    {
+        foreach (var list in pairList)
+        {
+            if (list.Count == 3)
+            {
+                UpDateRank(HandRank.FullHouse);
+                EndJudgment();
+                return;
+            }
+        }
+        UpDateRank(HandRank.TwoPairs);
+        EndJudgment();
+    }
 
     void UpDateRank(HandRank newRank)
     {
@@ -84,6 +182,17 @@ public class PokerJudgment
             handRank = newRank;
 
         Debug.Log(handRank.ToString());
+    }
+
+    void EndJudgment()
+    {
+        CardManager.instance.uiPoker.AppearResult(handRank.ToString());
+    }
+
+    public void Clear()
+    {
+        handRank = HandRank.NoPairs;
+        pairList.Clear();
     }
 
     private int[] InsertionSort(int[] arr)

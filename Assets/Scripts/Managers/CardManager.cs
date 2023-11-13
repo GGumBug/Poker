@@ -44,6 +44,15 @@ public class CardManager : MonoBehaviour
         shuffler.RerollCard(orderNumber);
     }
 
+    public void Clear()
+    {
+        foreach (var card in cards)
+            card.ReverseCard();
+        CardDatas = new CardData[5];
+        shuffler.Clear();
+        judgment.Clear();
+    }
+
     //TestLogic
     public void Test()
     {

@@ -17,10 +17,10 @@ public enum HandRank
     NoPairs,
     OnePair,
     TwoPairs,
-    ThreeofaKind,
+    ThreeOfAKind,
     Straight,
     Flush,
     FullHouse,
-    FourofaKind,
+    FourOfAKind,
     StraightFlush
 }
