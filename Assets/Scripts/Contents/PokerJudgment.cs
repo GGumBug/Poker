@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PokerJudgment
 {
-    bool isOnePair;
-    bool isThreePair;
     bool isStraight;
 
     CardData[] currentCards;
@@ -192,6 +190,7 @@ public class PokerJudgment
     public void Clear()
     {
         handRank = HandRank.NoPairs;
+        isStraight = false;
         pairList.Clear();
     }
 

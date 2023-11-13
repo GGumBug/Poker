@@ -51,6 +51,8 @@ public class UIPoker : MonoBehaviour
     {
         btnCheck.gameObject.SetActive(false);
         CardManager.instance.judgment.StartJudgment();
+        foreach (var btn in rerollButtons)
+            btn.gameObject.SetActive(false);
     }
 
     public void AppearResult(string result)
