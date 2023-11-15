@@ -31,13 +31,13 @@ public class Card : MonoBehaviour
             case "1":
                 num = "Ace";
                 break;
-            case "10":
+            case "11":
                 num = "Jack";
                 break;
-            case "11":
+            case "12":
                 num = "Queen";
                 break;
-            case "12":
+            case "13":
                 num = "King";
                 break;
         }

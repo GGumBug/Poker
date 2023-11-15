@@ -16,7 +16,7 @@ public class CardShuffler : MonoBehaviour
             CardColor cardColor = (CardColor)(i / 2);
             CardShape cardShape = (CardShape)i;
 
-            for (global::System.Int32 j = 1; j < 13; j++)
+            for (global::System.Int32 j = 1; j < 14; j++)
             {
                 CardData cardData = new CardData(cardColor, cardShape, j);
                 originDeck.Add(cardData);
