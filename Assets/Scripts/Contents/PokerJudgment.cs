@@ -64,7 +64,7 @@ public class PokerJudgment
         {
             if (cardnumbers[i] - cardnumbers[i + 1] == -1)
                 link++;
-            else if (cardnumbers[i] - cardnumbers[i + 1] == -8)
+            else if (cardnumbers[i] - cardnumbers[i + 1] == -9)
                 isEight = true;
         }
 
